@@ -3,7 +3,8 @@
     "oak": "https://deno.land/x/oak@v12.5.0/mod.ts"
   },
   "tasks": {
-    "dev": "deno run --watch --allow-net --allow-run --allow-read ./src/index.ts"
+    "start": "deno run --allow-net --allow-run --allow-read --allow-write ./src/index.ts",
+    "dev": "deno run --watch --allow-net --allow-run --allow-read --allow-write ./src/index.ts"
   },
   "fmt": {
     "useTabs": true,

@@ -1,37 +1,7 @@
-import { LANGUAGUES } from './languages.ts';
+import { LANGUAGUES, LANGUAGUES_INFO_MAP } from './languages.ts';
 
-async function runTypeScriptProgram(codeText: string) {
-	// Define command used to create the subprocess
-	const command = new Deno.Command(Deno.execPath(), {
-		args: [
-			'eval',
-			codeText,
-		],
-	});
-
-	// Create a promise that resolves after 2 seconds (timeout)
-	const timeoutPromise = new Promise<void>((_, reject) => {
-		setTimeout(() => {
-			reject(new Error('Execution takes too long (timeout).'));
-		}, 2000);
-	});
-
-	try {
-		// Use Promise.race to race between the command output and the timeout
-		const result = await Promise.race([
-			command.output(),
-			timeoutPromise,
-		]);
-
-		console.log(result);
-		return result;
-	} catch (error) {
-		throw error;
-	}
-}
-
-export async function runCode({ language = '', code = '' }) {
-	if (!code || code.trim().length === 0) {
+export async function runCode({ language = '', codeText = '' }) {
+	if (!codeText || codeText.trim().length === 0) {
 		throw new Error('No code found to execute.');
 	}
 
@@ -39,15 +9,35 @@ export async function runCode({ language = '', code = '' }) {
 		throw new Error('Language not supported');
 	}
 
-	switch (language) {
-		case 'typescript':
-			return await runTypeScriptProgram(code);
-	}
-}
+	const languageInfo = LANGUAGUES_INFO_MAP.get(language);
 
-const code = `
-// Simulate a long-running task
-for (let i = 0; i < 100000000; i++) {}
-console.log("Done!");
-`;
-await runCode({ language: 'typescript', code });
+	if (!languageInfo) {
+		throw new Error('Language information not found.');
+	}
+
+	const fileName = `${crypto.randomUUID()}.${languageInfo.fileExtention}`;
+
+	await Deno.writeTextFile(fileName, codeText);
+
+	const args = language === 'typescript' ? ['run', fileName] : [fileName];
+
+	const command = new Deno.Command(languageInfo.executeCommand, {
+		args,
+	});
+
+	const { code, stdout, stderr } = await command.output();
+
+	await Deno.remove(fileName);
+
+	const td = new TextDecoder();
+
+	return {
+		code,
+		stdout,
+		stderr,
+		decoded: {
+			stdout: td.decode(stdout),
+			stderr: td.decode(stderr),
+		},
+	};
+}

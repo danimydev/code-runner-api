@@ -8,19 +8,41 @@ type FormattedLanguage = {
 };
 
 export const languagesRouter = new Router({ prefix: '/languages' })
-	.get('/', (ctx) => {
-		const formattedLanguages: FormattedLanguage[] = LANGUAGUES.map((
-			language,
-		) => {
-			const languageInfo = LANGUAGUES_INFO_MAP.get(
+	.get('/', async (ctx) => {
+		const formattedLanguages: FormattedLanguage[] = await Promise.all(
+			LANGUAGUES.map(async (
 				language,
-			);
-			return {
-				language,
-				executeCommand: languageInfo?.executeCommand || 'not supported',
-				enviromentInfo: languageInfo?.enviromentInfo || 'not supported',
-			};
-		});
+			) => {
+				const languageInfo = LANGUAGUES_INFO_MAP.get(
+					language,
+				);
 
-		return ctx.response.body = formattedLanguages;
+				if (!languageInfo) {
+					return {
+						language,
+						enviromentInfo: 'not supported',
+						executeCommand: 'not supported',
+					};
+				}
+
+				const versionCommand = new Deno.Command(languageInfo.executeCommand, {
+					args: [
+						languageInfo.enviromentInfo,
+					],
+				});
+
+				const { code, stdout, stderr } = await versionCommand.output();
+
+				return {
+					language,
+					executeCommand: languageInfo.executeCommand,
+					enviromentInfo: new TextDecoder().decode(stdout),
+				};
+			}),
+		);
+
+		return ctx.response.body = {
+			languages: formattedLanguages,
+			timeStampt: Date.now(),
+		};
 	});
