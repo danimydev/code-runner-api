@@ -19,29 +19,32 @@ export async function runCode({ language = '', codeText = '' }) {
 
 	await Deno.writeTextFile(fileName, codeText);
 
-	const args = language === 'typescript' ? ['run', fileName] : [fileName];
-
 	const command = new Deno.Command(languageInfo.executeCommand, {
-		args,
+		args: languageInfo.executionArgs.concat(fileName),
 		stdout: 'piped',
 		stdin: 'piped',
 		stderr: 'piped',
 	});
 
-	const proccess = command.spawn();
+	const codeProccess = command.spawn();
 
 	// Promise that rejects after a timeout
 	const timeoutPromise = new Promise<Deno.CommandOutput>(
 		(_resolve, reject) => {
 			setTimeout(() => {
-				proccess.kill();
-				reject(new Error('Execution is taking too long.'));
-			}, 1000);
+				try {
+					codeProccess.kill();
+				} catch (error) {
+					console.log(error);
+				} finally {
+					reject(new Error('Execution is taking too long.'));
+				}
+			}, 3000);
 		},
 	);
 
 	const { code, stdout, stderr } = await Promise.race([
-		proccess.output(),
+		codeProccess.output(),
 		timeoutPromise,
 	]);
 
