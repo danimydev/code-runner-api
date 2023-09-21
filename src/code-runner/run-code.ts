@@ -23,9 +23,27 @@ export async function runCode({ language = '', codeText = '' }) {
 
 	const command = new Deno.Command(languageInfo.executeCommand, {
 		args,
+		stdout: 'piped',
+		stdin: 'piped',
+		stderr: 'piped',
 	});
 
-	const { code, stdout, stderr } = await command.output();
+	const proccess = command.spawn();
+
+	// Promise that rejects after a timeout
+	const timeoutPromise = new Promise<Deno.CommandOutput>(
+		(_resolve, reject) => {
+			setTimeout(() => {
+				proccess.kill();
+				reject(new Error('Execution is taking too long.'));
+			}, 1000);
+		},
+	);
+
+	const { code, stdout, stderr } = await Promise.race([
+		proccess.output(),
+		timeoutPromise,
+	]);
 
 	await Deno.remove(fileName);
 
