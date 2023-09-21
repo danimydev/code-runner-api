@@ -1,8 +1,3 @@
-export const LANGUAGUES = [
-	'typescript',
-	'python3',
-];
-
 export const LANGUAGUES_INFO_MAP = new Map([
 	['typescript', {
 		enviromentInfo: '--version',
@@ -15,3 +10,5 @@ export const LANGUAGUES_INFO_MAP = new Map([
 		fileExtention: 'py',
 	}],
 ]);
+
+export const LANGUAGUES = [...LANGUAGUES_INFO_MAP.keys()];
