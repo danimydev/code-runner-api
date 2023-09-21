@@ -31,7 +31,7 @@ export const languagesRouter = new Router({ prefix: '/languages' })
 					],
 				});
 
-				const { code, stdout, stderr } = await versionCommand.output();
+				const { stdout } = await versionCommand.output();
 
 				return {
 					language,
@@ -41,6 +41,7 @@ export const languagesRouter = new Router({ prefix: '/languages' })
 			}),
 		);
 
+		ctx.response.status = 200;
 		return ctx.response.body = {
 			languages: formattedLanguages,
 			timeStampt: Date.now(),
