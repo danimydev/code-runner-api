@@ -8,5 +8,5 @@ const app = new Application()
 	.use(languagesRouter.routes())
 	.use(codeRouter.routes());
 
-await app.listen({ port: 3000 });
 console.log(`server listening at 3000`);
+await app.listen({ port: 3000 });
