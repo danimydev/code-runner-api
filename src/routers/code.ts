@@ -18,14 +18,15 @@ export const codeRouter = new Router({ prefix: '/code' })
 		if (!reqBody.code) {
 			ctx.throw(400);
 		}
-		const result = await runCode({
+
+		const { code, decoded } = await runCode({
 			language: reqBody.language,
 			codeText: reqBody.code,
 		});
 
 		return ctx.response.body = {
 			languague: reqBody.language,
-			...result,
+			...{ code, ...decoded },
 			timeStampt: Date.now(),
 		};
 	});
