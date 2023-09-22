@@ -1,15 +1,9 @@
 import { Router } from 'oak';
 import { LANGUAGUES, LANGUAGUES_INFO_MAP } from '../code-runner/languages.ts';
 
-type FormattedLanguage = {
-	language: string;
-	executeCommand: string;
-	enviromentInfo: string;
-};
-
 export const languagesRouter = new Router({ prefix: '/languages' })
 	.get('/', async (ctx) => {
-		const formattedLanguages: FormattedLanguage[] = await Promise.all(
+		const formattedLanguages = await Promise.all(
 			LANGUAGUES.map(async (
 				language,
 			) => {
@@ -25,18 +19,23 @@ export const languagesRouter = new Router({ prefix: '/languages' })
 					};
 				}
 
-				const versionCommand = new Deno.Command(languageInfo.executeCommand, {
-					args: [
-						languageInfo.enviromentInfo,
-					],
-				});
+				const getEnviromentCommand = new Deno.Command(
+					languageInfo.executionCommand,
+					{
+						args: [
+							languageInfo.enviromentCommand,
+						],
+					},
+				);
 
-				const { stdout } = await versionCommand.output();
+				const { stdout } = await getEnviromentCommand.output();
+
+				const enviromentInfo = new TextDecoder().decode(stdout).split('\n');
+				enviromentInfo.pop();
 
 				return {
 					language,
-					executeCommand: languageInfo.executeCommand,
-					enviromentInfo: new TextDecoder().decode(stdout),
+					enviromentInfo,
 				};
 			}),
 		);

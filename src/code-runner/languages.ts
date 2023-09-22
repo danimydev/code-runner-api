@@ -1,15 +1,22 @@
-export const LANGUAGUES_INFO_MAP = new Map([
+type LanguageInfo = {
+	enviromentCommand: string;
+	executionCommand: string;
+	executionArgs: string[];
+	extension: string;
+};
+
+export const LANGUAGUES_INFO_MAP = new Map<string, LanguageInfo>([
 	['typescript', {
-		enviromentInfo: '--version',
-		executeCommand: 'deno',
+		enviromentCommand: '--version',
+		executionCommand: 'deno',
 		executionArgs: ['run'],
-		fileExtention: 'ts',
+		extension: 'ts',
 	}],
 	['python3', {
-		enviromentInfo: '--version',
-		executeCommand: 'python3',
+		enviromentCommand: '--version',
+		executionCommand: 'python3',
 		executionArgs: [],
-		fileExtention: 'py',
+		extension: 'py',
 	}],
 ]);
 

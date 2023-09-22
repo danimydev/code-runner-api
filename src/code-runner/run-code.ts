@@ -1,6 +1,22 @@
 import { LANGUAGUES, LANGUAGUES_INFO_MAP } from './languages.ts';
 
-export async function runCode({ language = '', codeText = '' }) {
+type RunCodeResult = {
+	code: number;
+	stdout: Uint8Array;
+	stderr: Uint8Array;
+	decoded: {
+		stdout: string;
+		stderr: string;
+	};
+};
+
+export async function runCode({
+	language,
+	codeText,
+}: {
+	language: string;
+	codeText: string;
+}): Promise<RunCodeResult> {
 	if (!codeText || codeText.trim().length === 0) {
 		throw new Error('No code found to execute.');
 	}
@@ -15,11 +31,11 @@ export async function runCode({ language = '', codeText = '' }) {
 		throw new Error('Language information not found.');
 	}
 
-	const fileName = `${crypto.randomUUID()}.${languageInfo.fileExtention}`;
+	const fileName = `${crypto.randomUUID()}.${languageInfo.extension}`;
 
 	await Deno.writeTextFile(fileName, codeText);
 
-	const command = new Deno.Command(languageInfo.executeCommand, {
+	const command = new Deno.Command(languageInfo.executionCommand, {
 		args: languageInfo.executionArgs.concat(fileName),
 		stdout: 'piped',
 		stdin: 'piped',
@@ -28,7 +44,6 @@ export async function runCode({ language = '', codeText = '' }) {
 
 	const codeProccess = command.spawn();
 
-	// Promise that rejects after a timeout
 	const timeoutPromise = new Promise<Deno.CommandOutput>(
 		(_resolve, reject) => {
 			setTimeout(() => {
