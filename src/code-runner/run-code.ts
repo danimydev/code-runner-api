@@ -50,7 +50,7 @@ export async function runCode({
 				try {
 					codeProccess.kill();
 				} catch (error) {
-					console.log(error);
+					reject(error);
 				} finally {
 					reject(new Error('Execution is taking too long.'));
 				}
