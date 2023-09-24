@@ -59,6 +59,12 @@ Start the server
   GET /languages
 ```
 
+#### Get supported languages by name (unique)
+
+```http
+  GET /languages/:languageName
+```
+
 #### Run code
 
 ```http
