@@ -1,6 +1,6 @@
 import { Router } from 'oak';
 import { runCode } from '../code-runner/run-code.ts';
-import { LANGUAGUES } from '../code-runner/languages.ts';
+import { LANGUAGUES_NAMES } from '../code-runner/languages.ts';
 
 export const codeRouter = new Router({ prefix: '/code' })
 	.post('/', async (ctx) => {
@@ -22,7 +22,7 @@ export const codeRouter = new Router({ prefix: '/code' })
 				ctx.throw(400, 'code is required.');
 			}
 
-			if (!LANGUAGUES.includes(reqBody.language)) {
+			if (!LANGUAGUES_NAMES.includes(reqBody.language)) {
 				ctx.throw(400, 'language not supported');
 			}
 

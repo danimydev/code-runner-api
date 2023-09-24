@@ -1,4 +1,4 @@
-import { LANGUAGUES, LANGUAGUES_INFO_MAP } from './languages.ts';
+import { LANGUAGUES_INFO_MAP, LANGUAGUES_NAMES } from './languages.ts';
 
 type RunCodeResult = {
 	code: number;
@@ -21,7 +21,7 @@ export async function runCode({
 		throw new Error('No code found to execute.');
 	}
 
-	if (!LANGUAGUES.includes(language)) {
+	if (!LANGUAGUES_NAMES.includes(language)) {
 		throw new Error('Language not supported');
 	}
 
