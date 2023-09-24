@@ -1,26 +1,26 @@
 type LanguageInfo = {
-	enviromentCommand: string;
-	executionCommand: string;
-	executionArgs: string[];
-	extension: string;
-	websiteUrl: string;
+  enviromentCommand: string;
+  executionCommand: string;
+  executionArgs: string[];
+  extension: string;
+  websiteUrl: string;
 };
 
 export const LANGUAGUES_INFO_MAP = new Map<string, LanguageInfo>([
-	['typescript', {
-		enviromentCommand: '--version',
-		executionCommand: 'deno',
-		executionArgs: ['run'],
-		extension: 'ts',
-		websiteUrl: 'https://www.typescriptlang.org/',
-	}],
-	['python3', {
-		enviromentCommand: '--version',
-		executionCommand: 'python3',
-		executionArgs: [],
-		extension: 'py',
-		websiteUrl: 'https://www.python.org/',
-	}],
+  ['typescript', {
+    enviromentCommand: '--version',
+    executionCommand: 'deno',
+    executionArgs: ['run'],
+    extension: 'ts',
+    websiteUrl: 'https://www.typescriptlang.org/',
+  }],
+  ['python3', {
+    enviromentCommand: '--version',
+    executionCommand: 'python3',
+    executionArgs: [],
+    extension: 'py',
+    websiteUrl: 'https://www.python.org/',
+  }],
 ]);
 
 export const LANGUAGUES_NAMES = [...LANGUAGUES_INFO_MAP.keys()];

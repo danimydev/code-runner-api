@@ -9,7 +9,7 @@
     "dev": "deno run --watch --allow-net --allow-run --allow-read --allow-write ./src/index.ts"
   },
   "fmt": {
-    "useTabs": true,
+    "useTabs": false,
     "lineWidth": 80,
     "indentWidth": 2,
     "semiColons": true,
