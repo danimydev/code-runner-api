@@ -1,5 +1,8 @@
 import { Router } from 'oak';
-import { LANGUAGUES, LANGUAGUES_INFO_MAP } from '../code-runner/languages.ts';
+import {
+	LANGUAGUES_INFO_MAP,
+	LANGUAGUES_NAMES,
+} from '../code-runner/languages.ts';
 import { r2d2Wrapper } from '../redis/r2d2-wrapper.ts';
 
 export const languagesRouter = new Router({ prefix: '/languages' })
@@ -16,19 +19,15 @@ export const languagesRouter = new Router({ prefix: '/languages' })
 		}
 
 		const formattedLanguages = await Promise.all(
-			LANGUAGUES.map(async (
-				language,
+			LANGUAGUES_NAMES.map(async (
+				languageName,
 			) => {
 				const languageInfo = LANGUAGUES_INFO_MAP.get(
-					language,
+					languageName,
 				);
 
 				if (!languageInfo) {
-					return {
-						language,
-						enviromentInfo: 'not supported',
-						executeCommand: 'not supported',
-					};
+					return undefined;
 				}
 
 				const getEnviromentCommand = new Deno.Command(
@@ -46,8 +45,9 @@ export const languagesRouter = new Router({ prefix: '/languages' })
 				enviromentInfo.pop();
 
 				return {
-					language,
-					enviromentInfo,
+					name: languageName,
+					info: languageInfo,
+					enviroment: enviromentInfo,
 				};
 			}),
 		);
@@ -65,14 +65,11 @@ export const languagesRouter = new Router({ prefix: '/languages' })
 		try {
 			const { languageName } = ctx.params;
 
-			const cached = await r2d2Wrapper.get(`languages-${languageName}`);
-
-			if (cached) {
-				const enviromentInfo = JSON.parse(cached.toString());
-				ctx.response.status = 200;
-				return ctx.response.body = {
-					language: enviromentInfo,
-					timeStampt: Date.now(),
+			if (!LANGUAGUES_NAMES.includes(languageName)) {
+				ctx.response.status = 404;
+				ctx.response.body = {
+					code: 'NOT_FOUND',
+					error: 'Language not found',
 				};
 			}
 
@@ -81,7 +78,21 @@ export const languagesRouter = new Router({ prefix: '/languages' })
 				ctx.response.status = 404;
 				ctx.response.body = {
 					code: 'NOT_FOUND',
-					error: 'Language not found.',
+					error: 'Language information not found.',
+				};
+				return;
+			}
+
+			const cached = await r2d2Wrapper.get(`languages-${languageName}`);
+
+			if (cached) {
+				const enviromentInfo = JSON.parse(cached.toString());
+				ctx.response.status = 200;
+				ctx.response.body = {
+					name: languageName,
+					info: languageInfo,
+					enviroment: enviromentInfo,
+					timeStampt: Date.now(),
 				};
 				return;
 			}
@@ -117,8 +128,10 @@ export const languagesRouter = new Router({ prefix: '/languages' })
 
 			ctx.response.status = 200;
 			ctx.response.body = {
-				language: languageName,
-				enviromentInfo,
+				name: languageName,
+				info: languageInfo,
+				enviroment: enviromentInfo,
+				timeStampt: Date.now(),
 			};
 			return;
 		} catch (error) {

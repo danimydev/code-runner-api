@@ -3,6 +3,7 @@ type LanguageInfo = {
 	executionCommand: string;
 	executionArgs: string[];
 	extension: string;
+	websiteUrl: string;
 };
 
 export const LANGUAGUES_INFO_MAP = new Map<string, LanguageInfo>([
@@ -11,13 +12,15 @@ export const LANGUAGUES_INFO_MAP = new Map<string, LanguageInfo>([
 		executionCommand: 'deno',
 		executionArgs: ['run'],
 		extension: 'ts',
+		websiteUrl: 'https://www.typescriptlang.org/',
 	}],
 	['python3', {
 		enviromentCommand: '--version',
 		executionCommand: 'python3',
 		executionArgs: [],
 		extension: 'py',
+		websiteUrl: 'https://www.python.org/',
 	}],
 ]);
 
-export const LANGUAGUES = [...LANGUAGUES_INFO_MAP.keys()];
+export const LANGUAGUES_NAMES = [...LANGUAGUES_INFO_MAP.keys()];
