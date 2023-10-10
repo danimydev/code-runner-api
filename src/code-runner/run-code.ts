@@ -1,4 +1,7 @@
-import { LANGUAGUES_INFO_MAP, LANGUAGUES_NAMES } from './languages.ts';
+import {
+  LANGUAGUES_INFO_MAP,
+  LANGUAGUES_NAMES,
+} from '@/code-runner/languages.ts';
 
 type RunCodeResult = {
   code: number;

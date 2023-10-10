@@ -1,6 +1,6 @@
 import { Router } from 'oak';
-import { runCode } from '../code-runner/run-code.ts';
-import { LANGUAGUES_NAMES } from '../code-runner/languages.ts';
+import { runCode } from '@/code-runner/run-code.ts';
+import { LANGUAGUES_NAMES } from '@/code-runner/languages.ts';
 
 export const codeRouter = new Router({ prefix: '/code' })
   .post('/', async (ctx) => {

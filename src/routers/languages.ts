@@ -1,9 +1,11 @@
 import { Router } from 'oak';
+
 import {
   LANGUAGUES_INFO_MAP,
   LANGUAGUES_NAMES,
-} from '../code-runner/languages.ts';
-import { r2d2Wrapper } from '../redis/r2d2-wrapper.ts';
+} from '@/code-runner/languages.ts';
+
+import { r2d2Wrapper } from '@/redis/r2d2-wrapper.ts';
 
 export const languagesRouter = new Router({ prefix: '/languages' })
   .get('/', async (ctx) => {
