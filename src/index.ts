@@ -1,7 +1,8 @@
 import { Application } from 'oak';
-import { healthRouter } from './routers/health.ts';
-import { languagesRouter } from './routers/languages.ts';
-import { codeRouter } from './routers/code.ts';
+
+import { healthRouter } from "@/routers/health.ts";
+import { languagesRouter } from "@/routers/languages.ts";
+import { codeRouter } from "@/routers/code.ts";
 
 const app = new Application()
   .use(healthRouter.routes())
