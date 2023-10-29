@@ -1,5 +1,2 @@
 # Editors
 .vscode
-
-# Docker Volumes
-redis_data
