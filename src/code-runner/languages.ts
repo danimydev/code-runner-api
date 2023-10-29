@@ -7,19 +7,19 @@ type LanguageInfo = {
 };
 
 export const LANGUAGUES_INFO_MAP = new Map<string, LanguageInfo>([
-  ['typescript', {
-    enviromentCommand: '--version',
-    executionCommand: 'deno',
-    executionArgs: ['run'],
-    extension: 'ts',
-    websiteUrl: 'https://www.typescriptlang.org/',
+  ["typescript", {
+    enviromentCommand: "--version",
+    executionCommand: "deno",
+    executionArgs: ["run"],
+    extension: "ts",
+    websiteUrl: "https://www.typescriptlang.org/",
   }],
-  ['python3', {
-    enviromentCommand: '--version',
-    executionCommand: 'python3',
+  ["python3", {
+    enviromentCommand: "--version",
+    executionCommand: "python3",
     executionArgs: [],
-    extension: 'py',
-    websiteUrl: 'https://www.python.org/',
+    extension: "py",
+    websiteUrl: "https://www.python.org/",
   }],
 ]);
 

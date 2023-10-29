@@ -1,4 +1,4 @@
-import { Application } from 'oak';
+import { Application } from "oak";
 
 import { healthRouter } from "@/routers/health.ts";
 import { languagesRouter } from "@/routers/languages.ts";

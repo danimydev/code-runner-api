@@ -1,7 +1,7 @@
 import {
   LANGUAGUES_INFO_MAP,
   LANGUAGUES_NAMES,
-} from '@/code-runner/languages.ts';
+} from "@/code-runner/languages.ts";
 
 type RunCodeResult = {
   code: number;
@@ -21,17 +21,17 @@ export async function runCode({
   codeText: string;
 }): Promise<RunCodeResult> {
   if (!codeText || codeText.trim().length === 0) {
-    throw new Error('No code found to execute.');
+    throw new Error("No code found to execute.");
   }
 
   if (!LANGUAGUES_NAMES.includes(language)) {
-    throw new Error('Language not supported');
+    throw new Error("Language not supported");
   }
 
   const languageInfo = LANGUAGUES_INFO_MAP.get(language);
 
   if (!languageInfo) {
-    throw new Error('Language information not found.');
+    throw new Error("Language information not found.");
   }
 
   const fileName = `${crypto.randomUUID()}.${languageInfo.extension}`;
@@ -40,9 +40,9 @@ export async function runCode({
 
   const command = new Deno.Command(languageInfo.executionCommand, {
     args: languageInfo.executionArgs.concat(fileName),
-    stdout: 'piped',
-    stdin: 'piped',
-    stderr: 'piped',
+    stdout: "piped",
+    stdin: "piped",
+    stderr: "piped",
   });
 
   const codeProccess = command.spawn();
@@ -55,7 +55,7 @@ export async function runCode({
         } catch (error) {
           reject(error);
         } finally {
-          reject(new Error('Execution is taking too long.'));
+          reject(new Error("Execution is taking too long."));
         }
       }, 3000);
     },

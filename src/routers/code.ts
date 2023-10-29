@@ -1,30 +1,30 @@
-import { Router } from 'oak';
+import { Router } from "oak";
 
-import { runCode } from '@/code-runner/run-code.ts';
-import { LANGUAGUES_NAMES } from '@/code-runner/languages.ts';
+import { runCode } from "@/code-runner/run-code.ts";
+import { LANGUAGUES_NAMES } from "@/code-runner/languages.ts";
 
-export const codeRouter = new Router({ prefix: '/code' })
-  .post('/', async (ctx) => {
+export const codeRouter = new Router({ prefix: "/code" })
+  .post("/", async (ctx) => {
     try {
       if (!ctx.request.hasBody) {
-        ctx.throw(415, 'json body is required');
+        ctx.throw(415, "json body is required");
       }
 
-      const reqBody = await ctx.request.body({ type: 'json' }).value as {
+      const reqBody = await ctx.request.body({ type: "json" }).value as {
         language: string;
         code: string;
       };
 
       if (!reqBody.language || reqBody.language.trim().length === 0) {
-        ctx.throw(400, 'language is required');
+        ctx.throw(400, "language is required");
       }
 
       if (!reqBody.code || reqBody.code.trim().length === 0) {
-        ctx.throw(400, 'code is required.');
+        ctx.throw(400, "code is required.");
       }
 
       if (!LANGUAGUES_NAMES.includes(reqBody.language)) {
-        ctx.throw(400, 'language not supported');
+        ctx.throw(400, "language not supported");
       }
 
       const { code, decoded: { stderr, stdout } } = await runCode({
