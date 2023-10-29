@@ -69,7 +69,7 @@ export const languagesRouter = new Router({ prefix: "/languages" })
 
       if (!LANGUAGUES_NAMES.includes(languageName)) {
         ctx.response.status = 404;
-        ctx.response.body = {
+        return ctx.response.body = {
           code: "NOT_FOUND",
           error: "Language not found",
         };
@@ -78,11 +78,10 @@ export const languagesRouter = new Router({ prefix: "/languages" })
       const languageInfo = LANGUAGUES_INFO_MAP.get(languageName);
       if (!languageInfo) {
         ctx.response.status = 404;
-        ctx.response.body = {
+        return ctx.response.body = {
           code: "NOT_FOUND",
           error: "Language information not found.",
         };
-        return;
       }
 
       const cached = await r2d2Wrapper.get(`languages-${languageName}`);
@@ -90,13 +89,12 @@ export const languagesRouter = new Router({ prefix: "/languages" })
       if (cached) {
         const enviromentInfo = JSON.parse(cached.toString());
         ctx.response.status = 200;
-        ctx.response.body = {
+        return ctx.response.body = {
           name: languageName,
           info: languageInfo,
           enviroment: enviromentInfo,
           timeStampt: Date.now(),
         };
-        return;
       }
 
       const getEnviromentCommand = new Deno.Command(
@@ -115,11 +113,10 @@ export const languagesRouter = new Router({ prefix: "/languages" })
 
       if (code !== 0 || stderr.length > 0) {
         ctx.response.status = 500;
-        ctx.response.body = {
+        return ctx.response.body = {
           code: "INTERNAL_SERVER_ERROR",
           error: "An error has ocurred on our side",
         };
-        return;
       }
 
       await r2d2Wrapper.set(
@@ -129,19 +126,17 @@ export const languagesRouter = new Router({ prefix: "/languages" })
       await r2d2Wrapper.setTTL(`languages-${languageName}`, 12 * 60 * 60);
 
       ctx.response.status = 200;
-      ctx.response.body = {
+      return ctx.response.body = {
         name: languageName,
         info: languageInfo,
         enviroment: enviromentInfo,
         timeStampt: Date.now(),
       };
-      return;
     } catch (error) {
       ctx.response.status = 500;
-      ctx.response.body = {
+      return ctx.response.body = {
         code: "INTERNAL_SERVER_ERROR",
         error: (error as Error).message,
       };
-      return;
     }
   });
