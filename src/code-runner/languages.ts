@@ -21,6 +21,13 @@ export const LANGUAGUES_INFO_MAP = new Map<string, LanguageInfo>([
     extension: "py",
     websiteUrl: "https://www.python.org/",
   }],
+  ["javascript", {
+    enviromentCommand: "--version",
+    executionCommand: "deno",
+    executionArgs: ["run"],
+    extension: "js",
+    websiteUrl: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+  }],
 ]);
 
 export const LANGUAGUES_NAMES = [...LANGUAGUES_INFO_MAP.keys()];
