@@ -14,7 +14,7 @@ export const LANGUAGUES_INFO_MAP = new Map<string, LanguageInfo>([
     extension: "ts",
     websiteUrl: "https://www.typescriptlang.org/",
   }],
-  ["python3", {
+  ["python", {
     enviromentCommand: "--version",
     executionCommand: "python3",
     executionArgs: [],
