@@ -27,7 +27,7 @@ export const codeRouter = new Router({ prefix: "/code" })
         ctx.throw(400, "language not supported");
       }
 
-      const { code, decoded: { stderr, stdout } } = await runCode({
+      const { code, elapsed, decoded: { stderr, stdout } } = await runCode({
         language: reqBody.language,
         codeText: reqBody.code,
       });
@@ -38,6 +38,7 @@ export const codeRouter = new Router({ prefix: "/code" })
         code,
         stdout,
         stderr,
+        elapsed,
         timeStampt: Date.now(),
       };
     } catch (error) {

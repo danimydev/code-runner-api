@@ -7,6 +7,7 @@ type RunCodeResult = {
   code: number;
   stdout: Uint8Array;
   stderr: Uint8Array;
+  elapsed: number;
   decoded: {
     stdout: string;
     stderr: string;
@@ -61,10 +62,14 @@ export async function runCode({
     },
   );
 
+  const startTime = new Date().getTime();
+
   const { code, stdout, stderr } = await Promise.race([
     codeProccess.output(),
     timeoutPromise,
   ]);
+
+  const endTime = new Date().getTime();
 
   await Deno.remove(fileName);
 
@@ -74,6 +79,7 @@ export async function runCode({
     code,
     stdout,
     stderr,
+    elapsed: endTime - startTime,
     decoded: {
       stdout: td.decode(stdout),
       stderr: td.decode(stderr),
