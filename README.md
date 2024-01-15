@@ -12,7 +12,9 @@ A deno api for running code in different programming languages.
 ## Supported Languages
 
 - [typescript](https://www.typescriptlang.org/)
+- [javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 - [python](https://www.python.org/)
+- [golang](https://go.dev/)
 
 
 ## Run Locally
