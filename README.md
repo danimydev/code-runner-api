@@ -13,6 +13,7 @@ A deno api for running code in different programming languages.
 
 - [typescript](https://www.typescriptlang.org/)
 - [python](https://www.python.org/)
+- [golang](https://go.dev/)
 
 
 ## Run Locally
