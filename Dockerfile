@@ -6,6 +6,9 @@ RUN apk update
 # Python3
 RUN apk add python3
 
+# Golang
+RUN apk add go
+
 # Switch work dir
 WORKDIR /app
 

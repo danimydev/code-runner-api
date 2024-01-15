@@ -28,6 +28,13 @@ export const LANGUAGUES_INFO_MAP = new Map<string, LanguageInfo>([
     extension: "js",
     websiteUrl: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
   }],
+  ["golang", {
+    enviromentCommand: "version",
+    executionCommand: "go",
+    executionArgs: ["run"],
+    extension: "go",
+    websiteUrl: "https://golang.org/",
+  }],
 ]);
 
 export const LANGUAGUES_NAMES = [...LANGUAGUES_INFO_MAP.keys()];
