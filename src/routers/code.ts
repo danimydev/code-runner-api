@@ -1,7 +1,13 @@
 import { Router } from "oak";
+import { minLength, object, parse, string } from "valibot";
 
 import { runCode } from "@/code-runner/run-code.ts";
 import { LANGUAGUES_NAMES } from "@/code-runner/languages.ts";
+
+const PostCodeBodySchema = object({
+  language: string([minLength(1)]),
+  code: string([minLength(1)]),
+});
 
 export const codeRouter = new Router({ prefix: "/code" })
   .post("/", async (ctx) => {
@@ -15,26 +21,28 @@ export const codeRouter = new Router({ prefix: "/code" })
         code: string;
       };
 
-      if (!reqBody.language || reqBody.language.trim().length === 0) {
+      const body = parse(PostCodeBodySchema, reqBody);
+
+      if (!body.language || body.language.trim().length === 0) {
         ctx.throw(400, "language is required");
       }
 
-      if (!reqBody.code || reqBody.code.trim().length === 0) {
+      if (!body.code || body.code.trim().length === 0) {
         ctx.throw(400, "code is required.");
       }
 
-      if (!LANGUAGUES_NAMES.includes(reqBody.language)) {
+      if (!LANGUAGUES_NAMES.includes(body.language)) {
         ctx.throw(400, "language not supported");
       }
 
       const { code, elapsed, decoded: { stderr, stdout } } = await runCode({
-        language: reqBody.language,
-        codeText: reqBody.code,
+        language: body.language,
+        codeText: body.code,
       });
 
       ctx.response.status = 201;
       return ctx.response.body = {
-        languague: reqBody.language,
+        languague: body.language,
         code,
         stdout,
         stderr,

@@ -4,6 +4,7 @@
     "r2d2": "https://deno.land/x/r2d2@v1.1.11/mod.ts",
     "retry": "https://deno.land/std@0.202.0/async/retry.ts",
     "cors": "https://deno.land/x/cors@v1.2.2/mod.ts",
+    "valibot": "npm:valibot",
     "@/": "./src/"
   },
   "tasks": {
