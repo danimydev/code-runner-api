@@ -1,4 +1,4 @@
-FROM denoland/deno:alpine
+FROM denoland/deno:alpine-1.39.4
 
 # Install depencies
 RUN apk update
