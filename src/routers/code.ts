@@ -1,12 +1,12 @@
 import { Router } from "oak";
-import { minLength, object, parse, string } from "valibot";
+import * as valibot from "valibot";
 
 import { runCode } from "@/code-runner/run-code.ts";
 import { LANGUAGUES_NAMES } from "@/code-runner/languages.ts";
 
-const PostCodeBodySchema = object({
-  language: string([minLength(1)]),
-  code: string([minLength(1)]),
+const PostCodeBodySchema = valibot.object({
+  language: valibot.pipe(valibot.string(), valibot.minLength(1)),
+  code: valibot.pipe(valibot.string(), valibot.minLength(1)),
 });
 
 export const codeRouter = new Router({ prefix: "/code" })
@@ -21,7 +21,7 @@ export const codeRouter = new Router({ prefix: "/code" })
         code: string;
       };
 
-      const body = parse(PostCodeBodySchema, reqBody);
+      const body = valibot.parse(PostCodeBodySchema, reqBody);
 
       if (!body.language || body.language.trim().length === 0) {
         ctx.throw(400, "language is required");
