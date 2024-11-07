@@ -1,0 +1,18 @@
+meta {
+  name: run
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:3000/code
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "language": "python",
+    "code": "print(\"Hello World\")"
+  }
+}
