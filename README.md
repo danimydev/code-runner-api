@@ -49,6 +49,7 @@ Start the server
 ```
 
 ## API Reference
+You can use Bruno to open code-runner-api folder (collection).
 
 #### Health check
 ```http
